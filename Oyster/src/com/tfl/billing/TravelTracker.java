@@ -77,6 +77,11 @@ public class TravelTracker implements ScanListener {
             cardReader.register(this);
         }
     }
+    public void connect(IdentificationReader... cardReaders) {
+        for (IdentificationReader cardReader : cardReaders) {
+            cardReader.register(this);
+        }
+    }
 
     @Override
     public void cardScanned(UUID cardId, UUID readerId) {
