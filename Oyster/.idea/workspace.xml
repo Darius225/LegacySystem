@@ -24,14 +24,14 @@
       <file leaf-file-name="TravelTrackerTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/com/tfl/billing/TravelTrackerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="976">
-              <caret line="96" column="62" lean-forward="false" selection-start-line="96" selection-start-column="62" selection-end-line="96" selection-end-column="62" />
+            <state relative-caret-position="451">
+              <caret line="114" column="37" lean-forward="true" selection-start-line="114" selection-start-column="37" selection-end-line="114" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4237#4238#0" expanded="true" />
-                <element signature="e#4298#4299#0" expanded="true" />
-                <element signature="e#4349#4350#0" expanded="true" />
-                <element signature="e#4411#4412#0" expanded="true" />
+                <element signature="e#5248#5249#0" expanded="true" />
+                <element signature="e#5309#5310#0" expanded="true" />
+                <element signature="e#5360#5361#0" expanded="true" />
+                <element signature="e#5422#5423#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -387,7 +387,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.TravelTrackerTest">
+  <component name="RunManager" selected="JUnit.TravelTrackerTest.chargeLongIfLongJourneyIsMade">
     <configuration name="TravelTrackerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -463,6 +463,31 @@
       <envs />
       <patterns />
     </configuration>
+    <configuration name="TravelTrackerTest.chargeLongIfLongJourneyIsMade" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.tfl.billing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="Oyster" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.tfl.billing" />
+      <option name="MAIN_CLASS_NAME" value="com.tfl.billing.TravelTrackerTest" />
+      <option name="METHOD_NAME" value="chargeLongIfLongJourneyIsMade" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
     <configuration name="TravelTrackerTest.chargeNothingIfNoJourneysMade" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -487,38 +512,6 @@
       </option>
       <envs />
       <patterns />
-    </configuration>
-    <configuration name="UnknownOysterCardExceptionTest" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.tfl.billing.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="Oyster" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" value="com.tfl.billing" />
-      <option name="MAIN_CLASS_NAME" value="com.tfl.billing.UnknownOysterCardExceptionTest" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="WIDTH" value="400" />
@@ -602,18 +595,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest" />
-      <item index="1" class="java.lang.String" itemvalue="TestNG.UnknownOysterCardExceptionTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeAccounts" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeNothingIfNoJourneysMade" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeIfJourneyIsMade" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeAccounts" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeNothingIfNoJourneysMade" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeIfJourneyIsMade" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeLongIfLongJourneyIsMade" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeIfJourneyIsMade" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeNothingIfNoJourneysMade" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeAccounts" />
-        <item index="4" class="java.lang.String" itemvalue="TestNG.UnknownOysterCardExceptionTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeLongIfLongJourneyIsMade" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeIfJourneyIsMade" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeNothingIfNoJourneysMade" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TravelTrackerTest.chargeAccounts" />
       </list>
     </recent_temporary>
   </component>
@@ -644,12 +637,6 @@
     <history-entry file="TravelTrackerTest - 2017.11.23 at 12h 17m 12s.xml">
       <configuration name="TravelTrackerTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TravelTrackerTest_chargeIfJourneyIsMade - 2017.11.23 at 11h 46m 52s.xml">
-      <configuration name="TravelTrackerTest.chargeIfJourneyIsMade" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TravelTrackerTest_chargeIfJourneyIsMade - 2017.11.23 at 11h 47m 04s.xml">
-      <configuration name="TravelTrackerTest.chargeIfJourneyIsMade" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="TravelTrackerTest_chargeIfJourneyIsMade - 2017.11.23 at 11h 47m 24s.xml">
       <configuration name="TravelTrackerTest.chargeIfJourneyIsMade" configurationId="JUnit" />
     </history-entry>
@@ -665,8 +652,14 @@
     <history-entry file="TravelTrackerTest_chargeIfJourneyIsMade - 2017.11.23 at 12h 14m 37s.xml">
       <configuration name="TravelTrackerTest.chargeIfJourneyIsMade" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TravelTrackerTest_chargeNothingIfNoJourneysMade - 2017.11.23 at 11h 47m 01s.xml">
-      <configuration name="TravelTrackerTest.chargeNothingIfNoJourneysMade" configurationId="JUnit" />
+    <history-entry file="TravelTrackerTest_chargeLongIfLongJourneyIsMade - 2017.11.23 at 12h 25m 05s.xml">
+      <configuration name="TravelTrackerTest.chargeLongIfLongJourneyIsMade" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TravelTrackerTest_chargeLongIfLongJourneyIsMade - 2017.11.23 at 12h 25m 19s.xml">
+      <configuration name="TravelTrackerTest.chargeLongIfLongJourneyIsMade" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TravelTrackerTest_chargeLongIfLongJourneyIsMade - 2017.11.23 at 12h 27m 54s.xml">
+      <configuration name="TravelTrackerTest.chargeLongIfLongJourneyIsMade" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -690,7 +683,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.57787323" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32760474" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18322296" sideWeight="0.42212674" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11037528" sideWeight="0.42212674" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -719,7 +712,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/com/tfl/billing/TravelTrackerTest.java</url>
-          <line>57</line>
+          <line>56</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
@@ -1113,14 +1106,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/com/tfl/billing/TravelTrackerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="976">
-          <caret line="96" column="62" lean-forward="false" selection-start-line="96" selection-start-column="62" selection-end-line="96" selection-end-column="62" />
+        <state relative-caret-position="451">
+          <caret line="114" column="37" lean-forward="true" selection-start-line="114" selection-start-column="37" selection-end-line="114" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4237#4238#0" expanded="true" />
-            <element signature="e#4298#4299#0" expanded="true" />
-            <element signature="e#4349#4350#0" expanded="true" />
-            <element signature="e#4411#4412#0" expanded="true" />
+            <element signature="e#5248#5249#0" expanded="true" />
+            <element signature="e#5309#5310#0" expanded="true" />
+            <element signature="e#5360#5361#0" expanded="true" />
+            <element signature="e#5422#5423#0" expanded="true" />
           </folding>
         </state>
       </provider>
