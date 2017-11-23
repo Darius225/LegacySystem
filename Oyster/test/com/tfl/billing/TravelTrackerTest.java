@@ -116,6 +116,8 @@ public class TravelTrackerTest {
         tracker.chargeAccounts();
         assertThat(system.getTotalBill(),is(new BigDecimal(2.70).setScale(2, BigDecimal.ROUND_HALF_UP)));
     }
+  
+
 
 
     private class ControllableClock implements Clock{
