@@ -136,8 +136,39 @@ public class TravelTrackerTest {
         tracker.chargeAccounts();
         assertThat(system.getTotalBill(),is(new BigDecimal(3.80).setScale(2, BigDecimal.ROUND_HALF_UP)));
     }
+    @Test
+    public void capOffPeak(){
+        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
+        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        database.add(new Customer("John Smith",myCard.getCard()));
+
+        OysterCardIDReader paddingtonReader = new OysterCardIDReader(Station.PADDINGTON);
+        OysterCardIDReader barbicanReader = new OysterCardIDReader(Station.BARBICAN);
+        OysterCardIDReader moorgateReader = new OysterCardIDReader(Station.MOORGATE);
+        OysterCardIDReader liverPoolReader = new OysterCardIDReader(Station.LIVERPOOL_STREET);
+        TestBillingSystem system = new TestBillingSystem();
+        ControllableClock clock = new ControllableClock();
+        TravelTracker tracker = new TravelTracker(system,database,clock);
+        tracker.connect(paddingtonReader,barbicanReader,moorgateReader,liverPoolReader);
+
+        clock.setTIme(10,00);
+        paddingtonReader.touch(myCard);
+        clock.setTIme(10,30);
+        barbicanReader.touch(myCard);
+        clock.setTIme(10,35);
+        moorgateReader.touch(myCard);
+        clock.setTIme(10,40);
+        liverPoolReader.touch(myCard);
+        clock.setTIme(10,45);
+        moorgateReader.touch(myCard);
+        clock.setTIme(11,00);
+        barbicanReader.touch(myCard);
+        clock.setTIme(11,20);
 
 
+        tracker.chargeAccounts();
+        assertThat(system.getTotalBill(),is(new BigDecimal(7.00).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    }
 
     private class ControllableClock implements Clock{
 
