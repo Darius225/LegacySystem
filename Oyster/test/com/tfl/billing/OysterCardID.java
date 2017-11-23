@@ -13,6 +13,10 @@ public class OysterCardID implements Identification {
         this.card = new OysterCard(id);
     }
 
+    public OysterCard getCard() {
+        return card;
+    }
+
     @Override
     public UUID id() {
         return  card.id();

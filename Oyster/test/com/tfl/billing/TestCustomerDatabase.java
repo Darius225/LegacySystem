@@ -12,7 +12,6 @@ public class TestCustomerDatabase implements EntityDatabase {
 
     @Override
     public boolean isRegisteredId(UUID cardId) {
-
        return  CustomerDatabase.getInstance().isRegisteredId(cardId);
     }
 

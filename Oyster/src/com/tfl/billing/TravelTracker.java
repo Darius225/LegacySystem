@@ -1,9 +1,8 @@
 package com.tfl.billing;
 
-import com.oyster.*;
+import com.oyster.OysterCardReader;
+import com.oyster.ScanListener;
 import com.tfl.external.Customer;
-import com.tfl.external.CustomerDatabase;
-import com.tfl.external.PaymentsSystem;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -16,10 +15,35 @@ public class TravelTracker implements ScanListener {
     private final List<JourneyEvent> eventLog = new ArrayList<JourneyEvent>();
     private final Set<UUID> currentlyTravelling = new HashSet<UUID>();
 
-    public void chargeAccounts() {
-        CustomerDatabase customerDatabase = CustomerDatabase.getInstance();
 
-        List<Customer> customers = customerDatabase.getCustomers();
+    protected BillingSystem billingSystem;
+    protected EntityDatabase entityDatabase;
+
+    private Clock clock;
+
+
+
+
+    public TravelTracker(){
+        this(new TestBillingSystem(),new TestCustomerDatabase());
+    }
+    public TravelTracker(BillingSystem system,EntityDatabase database){
+        this(system,database,new Clock(){
+            public long getNow(){
+                return System.currentTimeMillis();
+            }
+        });
+    }
+    public TravelTracker(BillingSystem system,EntityDatabase database,Clock clock){
+        this.billingSystem = system;
+        this.entityDatabase = database;
+        this.clock = clock;
+    }
+
+    public void chargeAccounts() {
+//        CustomerDatabase customerDatabase = CustomerDatabase.getInstance();
+
+        List<Customer> customers = entityDatabase.getCustomers();
         for (Customer customer : customers) {
             totalJourneysFor(customer);
         }
@@ -54,8 +78,8 @@ public class TravelTracker implements ScanListener {
             }
             customerTotal = customerTotal.add(journeyPrice);
         }
-
-        PaymentsSystem.getInstance().charge(customer, journeys, roundToNearestPenny(customerTotal));
+        billingSystem.charge(customer,journeys,roundToNearestPenny(customerTotal));
+      //  PaymentsSystem.getInstance().charge(customer, journeys, roundToNearestPenny(customerTotal));
     }
     private BigDecimal roundToNearestPenny(BigDecimal poundsAndPence) {
         return poundsAndPence.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -86,12 +110,12 @@ public class TravelTracker implements ScanListener {
     @Override
     public void cardScanned(UUID cardId, UUID readerId) {
         if (currentlyTravelling.contains(cardId)) {
-            eventLog.add(new JourneyEnd(cardId, readerId));
+            eventLog.add(new JourneyEnd(cardId, readerId,clock));
             currentlyTravelling.remove(cardId);
         } else {
-            if (CustomerDatabase.getInstance().isRegisteredId(cardId)) {
+            if (entityDatabase.isRegisteredId(cardId)) {
                 currentlyTravelling.add(cardId);
-                eventLog.add(new JourneyStart(cardId, readerId));
+                eventLog.add(new JourneyStart(cardId, readerId,clock));
             } else {
                 throw new UnknownOysterCardException(cardId);
             }

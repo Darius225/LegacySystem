@@ -1,9 +1,6 @@
+package com.tfl.billing;
+
 import com.oyster.OysterCard;
-import com.oyster.OysterCardReader;
-import com.tfl.billing.TravelTracker;
-import com.tfl.billing.UnknownOysterCardException;
-import com.tfl.underground.OysterReaderLocator;
-import com.tfl.underground.Station;
 
 import java.util.UUID;
 
