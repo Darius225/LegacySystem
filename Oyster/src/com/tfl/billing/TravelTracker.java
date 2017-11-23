@@ -89,6 +89,9 @@ public class TravelTracker implements ScanListener {
             }
 
             customerTotal = customerTotal.add(journeyPrice);
+            if(customerTotal.floatValue()>7){
+                customerTotal = new BigDecimal(7);
+            }
         }
         billingSystem.charge(customer,journeys,roundToNearestPenny(customerTotal));
       //  PaymentsSystem.getInstance().charge(customer, journeys, roundToNearestPenny(customerTotal));
