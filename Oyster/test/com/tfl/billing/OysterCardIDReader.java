@@ -6,16 +6,19 @@ import com.oyster.ScanListener;
 import com.tfl.underground.OysterReaderLocator;
 import com.tfl.underground.Station;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class OysterCardIDReader implements IdentificationReader{
 
     OysterCardReader reader;
+    UUID uuid;
 
     public OysterCardIDReader(Station station){
         this.reader = OysterReaderLocator.atStation(station);
+        uuid = reader.id();
+    }
+    public OysterCardIDReader(String id){
+        uuid = UUID.fromString(id);
     }
 
     @Override
@@ -25,7 +28,7 @@ public class OysterCardIDReader implements IdentificationReader{
 
     @Override
     public UUID id() {
-        return reader.id();
+        return uuid;
     }
 
 

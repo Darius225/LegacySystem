@@ -31,6 +31,9 @@ public class TravelTracker implements ScanListener {
     public TravelTracker(){
         this(new TestBillingSystem(),new TestCustomerDatabase());
     }
+    public TravelTracker(BillingSystem system){
+        this(system,new TestCustomerDatabase());
+    }
     public TravelTracker(BillingSystem system,EntityDatabase database){
         this(system,database,new Clock(){
             public long getNow(){
@@ -43,6 +46,11 @@ public class TravelTracker implements ScanListener {
         this.entityDatabase = database;
         this.clock = clock;
     }
+    public TravelTracker(BillingSystem system,EntityDatabase database,List<JourneyEvent> eventLog){
+        this.billingSystem = system;
+        this.entityDatabase = database;
+        this.eventLog.addAll(eventLog);
+    }
 
     public void chargeAccounts() {
 //        CustomerDatabase customerDatabase = CustomerDatabase.getInstance();
@@ -54,6 +62,9 @@ public class TravelTracker implements ScanListener {
     }
 
     private void totalJourneysFor(Customer customer) {
+
+        boolean isOneJourneyPeak = false;
+
         List<JourneyEvent> customerJourneyEvents = new ArrayList<JourneyEvent>();
         for (JourneyEvent journeyEvent : eventLog) {
             if (journeyEvent.cardId().equals(customer.cardId())) {
@@ -79,18 +90,26 @@ public class TravelTracker implements ScanListener {
             BigDecimal journeyPrice = OFF_PEAK_JOURNEY_PRICE;
             if (peak(journey)) {
                 journeyPrice = PEAK_JOURNEY_PRICE;
+                isOneJourneyPeak = true;
             }
             if(isLong(journey)){
                 if (peak(journey)) {
                     journeyPrice = PEAK_LONG_JOURNEY_PRICE;
+                    isOneJourneyPeak = true;
                 }else{
                     journeyPrice = OFF_PEAK_LONG_JOURNEY_PRICE;
                 }
             }
 
             customerTotal = customerTotal.add(journeyPrice);
-            if(customerTotal.floatValue()>7){
-                customerTotal = new BigDecimal(7);
+            if(isOneJourneyPeak) {
+                if (customerTotal.floatValue() > 9) {
+                    customerTotal = new BigDecimal(9);
+                }
+            }else {
+                if (customerTotal.floatValue() > 7) {
+                    customerTotal = new BigDecimal(7);
+                }
             }
         }
         billingSystem.charge(customer,journeys,roundToNearestPenny(customerTotal));
@@ -133,12 +152,12 @@ public class TravelTracker implements ScanListener {
     @Override
     public void cardScanned(UUID cardId, UUID readerId) {
         if (currentlyTravelling.contains(cardId)) {
-            eventLog.add(new JourneyEnd(cardId, readerId,clock));
+            eventLog.add(new JourneyEnd(cardId, readerId));
             currentlyTravelling.remove(cardId);
         } else {
             if (entityDatabase.isRegisteredId(cardId)) {
                 currentlyTravelling.add(cardId);
-                eventLog.add(new JourneyStart(cardId, readerId,clock));
+                eventLog.add(new JourneyStart(cardId, readerId));
             } else {
                 throw new UnknownOysterCardException(cardId);
             }
