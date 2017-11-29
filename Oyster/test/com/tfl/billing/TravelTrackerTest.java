@@ -46,7 +46,7 @@ public class TravelTrackerTest {
     @Test
     public void chargeNothingIfNoJourneysMade() throws Exception
     {
-        charge_Correctly( 0 ,new int [] {} , new int [] {} , 0 );
+        no_journey( );
     }
     @Test
     public void chargeIfJourneyIsMade() throws Exception
@@ -70,12 +70,12 @@ public class TravelTrackerTest {
     @Test
     public void capOffPeak()
     {
-        charge_Correctly( 6 , new int [ ] { 10 , 10 , 10, 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
+        charge_Sequence_Of_Events ( 6 , new int [ ] { 10 , 10 , 10, 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
     }
     @Test
     public void capPeak()
     {
-        charge_Correctly( 6 , new int [ ] { 9 , 9 , 9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
+        charge_Sequence_Of_Events ( 6 , new int [ ] { 9 , 9 , 9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
     }
 
     private class ControllableClock implements Clock{
@@ -91,12 +91,18 @@ public class TravelTrackerTest {
             time = LocalTime.of(hour-1,minute,0,0);
         }
     }
-    public void single_journey ( int hour , int minute , int length , double total )
+    public void no_journey( ) // If no journey is made,then there are 0 events .
     {
-           int newMinute = minute + length ;
-           charge_Correctly ( 2 , new int[] { hour , hour + newMinute / 60 } , new int[] {minute , newMinute % 60 } , total );
+           charge_Sequence_Of_Events( 0 , new int [ ] {} , new int [ ] {} , 0 );
     }
-    public void charge_Correctly  ( int no_touches , int hour [ ] , int minutes [ ] , double total )
+    public void single_journey ( int start_Hour , int start_Minute , int length , double expected_Total ) // A journey can be seen as a sequence of 2 events .
+    {
+           int end_Minute = start_Minute + length ; // Determine the end minute and hour of the journey.We should take into account the case when the end hour is different from the start hour .
+           int end_Hour = start_Hour + end_Minute / 60 ;
+           end_Minute = end_Minute % 60 ;
+           charge_Sequence_Of_Events ( 2 , new int[] { start_Hour , end_Hour } , new int[] { start_Minute , end_Minute  } , expected_Total );
+    }
+    public void charge_Sequence_Of_Events ( int no_events , int hour [ ] , int minute [ ] , double expected_Total )
     {
         ControllableCustomerDatabase database = new ControllableCustomerDatabase();
         OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
@@ -111,15 +117,15 @@ public class TravelTrackerTest {
         ArrayList <OysterCardIDReader > readers = new ArrayList< >();
         readers.add ( paddingtonReader ) ;
         readers.add ( barbicanReader ) ;
-        for ( int i = 0 ; i < no_touches ; i ++ )
+        for ( int i = 0 ; i < no_events ; i ++ )
         {
-            clock.setTIme ( hour [ i ] , minutes  [ i ] ) ;
+            clock.setTIme ( hour [ i ] , minute  [ i ] ) ;
             builder.addEvent ( myCard , readers.get ( i % 2 ) ) ;
         }
         TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog(),c);
 
         tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(total).setScale(2, BigDecimal.ROUND_HALF_UP)));
+        assertThat(system.getTotalBill(),is(new BigDecimal(expected_Total).setScale(2, BigDecimal.ROUND_HALF_UP)));
     }
 
 }
