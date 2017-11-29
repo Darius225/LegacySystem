@@ -24,15 +24,14 @@ public class TravelTracker implements ScanListener {
     protected EntityDatabase entityDatabase;
 
     private Clock clock;
-
-
+    private Cache cache = new Cache();
 
 
     public TravelTracker(){
-        this(new TestBillingSystem(),new TestCustomerDatabase());
+        this( new TestBillingSystem(),new TestCustomerDatabase());
     }
     public TravelTracker(BillingSystem system){
-        this(system,new TestCustomerDatabase());
+        this(system,new TestCustomerDatabase() );
     }
     public TravelTracker(BillingSystem system,EntityDatabase database){
         this(system,database,new Clock(){
@@ -46,10 +45,11 @@ public class TravelTracker implements ScanListener {
         this.entityDatabase = database;
         this.clock = clock;
     }
-    public TravelTracker(BillingSystem system,EntityDatabase database,List<JourneyEvent> eventLog){
+    public TravelTracker(BillingSystem system,EntityDatabase database,List<JourneyEvent> eventLog , Cache cache){
         this.billingSystem = system;
         this.entityDatabase = database;
         this.eventLog.addAll(eventLog);
+        this.cache = cache ;
     }
 
     public void chargeAccounts() {
@@ -61,19 +61,13 @@ public class TravelTracker implements ScanListener {
         }
     }
 
-    private void totalJourneysFor(Customer customer) {
+    private void totalJourneysFor(Customer customer) { // Proxy pattern
 
         boolean isOneJourneyPeak = false;
-
-        List<JourneyEvent> customerJourneyEvents = new ArrayList<JourneyEvent>();
-        for (JourneyEvent journeyEvent : eventLog) {
-            if (journeyEvent.cardId().equals(customer.cardId())) {
-                customerJourneyEvents.add(journeyEvent);
-            }
-        }
-
+        System.out.println(customer.cardId()) ;
+        List<JourneyEvent> customerJourneyEvents = cache.get_Journeys_By_Customer( customer.cardId() ) ;
+        System.out.println( customerJourneyEvents.size() ) ;
         List<Journey> journeys = new ArrayList<Journey>();
-
         JourneyEvent start = null;
         for (JourneyEvent event : customerJourneyEvents) {
             if (event instanceof JourneyStart) {
@@ -113,7 +107,7 @@ public class TravelTracker implements ScanListener {
             }
         }
         billingSystem.charge(customer,journeys,roundToNearestPenny(customerTotal));
-      //  PaymentsSystem.getInstance().charge(customer, journeys, roundToNearestPenny(customerTotal));
+      //PaymentsSystem.getInstance().charge(customer, journeys, roundToNearestPenny(customerTotal));
     }
     private BigDecimal roundToNearestPenny(BigDecimal poundsAndPence) {
         return poundsAndPence.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -152,11 +146,15 @@ public class TravelTracker implements ScanListener {
     @Override
     public void cardScanned(UUID cardId, UUID readerId) {
         if (currentlyTravelling.contains(cardId)) {
-            eventLog.add(new JourneyEnd(cardId, readerId));
+            JourneyEvent event = new JourneyEnd(cardId, readerId) ;
+            eventLog.add( event );
+            cache.add_Journey( event ) ;
             currentlyTravelling.remove(cardId);
         } else {
             if (entityDatabase.isRegisteredId(cardId)) {
+                JourneyEvent event = new JourneyStart(cardId, readerId) ;
                 currentlyTravelling.add(cardId);
+                cache.add_Journey( event ) ;
                 eventLog.add(new JourneyStart(cardId, readerId));
             } else {
                 throw new UnknownOysterCardException(cardId);
