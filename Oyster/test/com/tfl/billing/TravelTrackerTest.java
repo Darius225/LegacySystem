@@ -18,13 +18,15 @@ import static org.junit.Assert.assertThat;
 
 
 
-public class TravelTrackerTest {
+public class TravelTrackerTest 
+{
 
 
 
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
     @Test
-    public void connect() throws Exception {
+    public void connect() throws Exception 
+    {
         TravelTracker tracker = new TravelTracker();
         IdentificationReader reader = context.mock(IdentificationReader.class,"reader1");
         IdentificationReader reader2 = context.mock(IdentificationReader.class,"reader2");
@@ -35,7 +37,8 @@ public class TravelTrackerTest {
         tracker.connect(reader,reader2);
     }
     @Test
-    public void cardScanned() throws Exception {
+    public void cardScanned() throws Exception 
+    {
         TravelTracker tracker = Mockito.spy(new TravelTracker());
         Identification myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
         IdentificationReader reader = new OysterCardIDReader(Station.VICTORIA_STATION);
@@ -46,7 +49,7 @@ public class TravelTrackerTest {
     @Test
     public void chargeNothingIfNoJourneysMade() throws Exception
     {
-        no_journey( );
+        no_journey ( ) ;
     }
     @Test
     public void chargeIfJourneyIsMade() throws Exception
@@ -56,38 +59,42 @@ public class TravelTrackerTest {
     @Test
     public void chargePeakIfPeakJourneyIsMade() throws Exception
     {
-        single_journey (9,0,15,3.20 ) ;
+        single_journey ( 9 ,  0 , 15 , 3.20 ) ;
     }
     @Test
     public void chargeLongIfLongJourneyIsMade() throws Exception
     {
-        single_journey ( 10 ,0,30,2.70 );
+        single_journey ( 10 , 0 , 30 , 2.70 );
     }
     @Test
-    public void chargeLongPeakIfLongPeakJourneyIsMade() throws Exception {
-        single_journey ( 9 , 0 , 30 , 3.80 ) ;
+    public void chargeLongPeakIfLongPeakJourneyIsMade() throws Exception 
+    {
+        single_journey ( 9  , 0 , 30 , 3.80 ) ;
     }
     @Test
     public void capOffPeak()
     {
-        charge_Sequence_Of_Events ( 6 , new int [ ] { 10 , 10 , 10, 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
+        charge_Sequence_Of_Events ( 6 , new int [ ] { 10 , 10 , 10 , 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
     }
     @Test
     public void capPeak()
     {
-        charge_Sequence_Of_Events ( 6 , new int [ ] { 9 , 9 , 9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
+        charge_Sequence_Of_Events ( 6 , new int [ ] {  9 ,  9 ,  9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
     }
 
-    private class ControllableClock implements Clock{
+    private class ControllableClock implements Clock 
+    {
 
         LocalTime time = LocalTime.now();
 
         @Override
-        public long getNow() {
+        public long getNow() 
+        {
             return (long)(time.toNanoOfDay()/1e6);
         }
 
-        public void setTIme(int hour,int minute){
+        public void setTIme(int hour,int minute)
+        {
             time = LocalTime.of(hour-1,minute,0,0);
         }
     }
@@ -100,7 +107,7 @@ public class TravelTrackerTest {
            int end_Minute = start_Minute + length ; // Determine the end minute and hour of the journey.We should take into account the case when the end hour is different from the start hour .
            int end_Hour = start_Hour + end_Minute / 60 ;
            end_Minute = end_Minute % 60 ;
-           charge_Sequence_Of_Events ( 2 , new int[] { start_Hour , end_Hour } , new int[] { start_Minute , end_Minute  } , expected_Total );
+           charge_Sequence_Of_Events ( 2 , new int[] { start_Hour , end_Hour } , new int[] { start_Minute , end_Minute  } , expected_Total ) ;
     }
     public void charge_Sequence_Of_Events ( int no_events , int hour [ ] , int minute [ ] , double expected_Total )
     {
