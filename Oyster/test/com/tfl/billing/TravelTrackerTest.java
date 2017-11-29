@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -43,162 +44,38 @@ public class TravelTrackerTest {
         Mockito.verify(tracker).cardScanned(myCard.id(),reader.id());
     }
     @Test
-    public void chargeNothingIfNoJourneysMade() throws Exception {
-
-        TestBillingSystem system = new TestBillingSystem();
-        TravelTracker tracker = new TravelTracker(system);
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void chargeNothingIfNoJourneysMade() throws Exception
+    {
+        charge_Correctly( 0 ,new int [] {} , new int [] {} , 0 );
     }
     @Test
-    public void chargeIfJourneyIsMade() throws Exception {
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(10,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(10,15);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(2.40).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void chargeIfJourneyIsMade() throws Exception
+    {
+        single_journey ( 10 , 0 , 15 , 2.40 ) ;
     }
     @Test
-    public void chargePeakIfPeakJourneyIsMade() throws Exception {
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(9,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(9,15);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(3.20).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void chargePeakIfPeakJourneyIsMade() throws Exception
+    {
+        single_journey (9,0,15,3.20 ) ;
     }
     @Test
-    public void chargeLongIfLongJourneyIsMade() throws Exception {
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(10,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(10,30);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(2.70).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void chargeLongIfLongJourneyIsMade() throws Exception
+    {
+        single_journey ( 10 ,0,30,2.70 );
     }
     @Test
     public void chargeLongPeakIfLongPeakJourneyIsMade() throws Exception {
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(9,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(9,30);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(3.80).setScale(2, BigDecimal.ROUND_HALF_UP)));
+        single_journey ( 9 , 0 , 30 , 3.80 ) ;
     }
     @Test
-    public void capOffPeak(){
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(10,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(10,15);
-        builder.addEvent(myCard,barbicanReader);
-        clock.setTIme(10,55);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(11,15);
-        builder.addEvent(myCard,barbicanReader);
-        clock.setTIme(11,20);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(11,55);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-        assertThat(system.getTotalBill(),is(new BigDecimal(7.00).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void capOffPeak()
+    {
+        charge_Correctly( 6 , new int [ ] { 10 , 10 , 10, 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
     }
     @Test
-    public void capPeak(){
-        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
-
-        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
-        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
-        ControllableClock clock = new ControllableClock();
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
-
-        clock.setTIme(9,00);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(9,15);
-        builder.addEvent(myCard,barbicanReader);
-        clock.setTIme(9,55);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(10,15);
-        builder.addEvent(myCard,barbicanReader);
-        clock.setTIme(10,20);
-        builder.addEvent(myCard,paddingtonReader);
-        clock.setTIme(10,55);
-        builder.addEvent(myCard,barbicanReader);
-
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog());
-
-        tracker.chargeAccounts();
-
-        assertThat(system.getTotalBill(),is(new BigDecimal(9.00).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    public void capPeak()
+    {
+        charge_Correctly( 6 , new int [ ] { 9 , 9 , 9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
     }
 
     private class ControllableClock implements Clock{
@@ -214,7 +91,35 @@ public class TravelTrackerTest {
             time = LocalTime.of(hour-1,minute,0,0);
         }
     }
+    public void single_journey ( int hour , int minute , int length , double total )
+    {
+           int newMinute = minute + length ;
+           charge_Correctly ( 2 , new int[] { hour , hour + newMinute / 60 } , new int[] {minute , newMinute % 60 } , total );
+    }
+    public void charge_Correctly  ( int no_touches , int hour [ ] , int minutes [ ] , double total )
+    {
+        ControllableCustomerDatabase database = new ControllableCustomerDatabase();
+        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        database.add(new Customer("John Smith",myCard.getCard()));
 
+        OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
+        OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
+        TestBillingSystem system = new TestBillingSystem();
+        ControllableClock clock = new ControllableClock();
+        Cache c = new Cache () ;
+        JourneyBuilder builder = new JourneyBuilder(clock,database,c);
+        ArrayList <OysterCardIDReader > readers = new ArrayList< >();
+        readers.add ( paddingtonReader ) ;
+        readers.add ( barbicanReader ) ;
+        for ( int i = 0 ; i < no_touches ; i ++ )
+        {
+            clock.setTIme ( hour [ i ] , minutes  [ i ] ) ;
+            builder.addEvent ( myCard , readers.get ( i % 2 ) ) ;
+        }
+        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog(),c);
 
+        tracker.chargeAccounts();
+        assertThat(system.getTotalBill(),is(new BigDecimal(total).setScale(2, BigDecimal.ROUND_HALF_UP)));
+    }
 
 }
