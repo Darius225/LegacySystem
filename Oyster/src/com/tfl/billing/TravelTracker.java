@@ -28,10 +28,10 @@ public class TravelTracker implements ScanListener {
 
 
     public TravelTracker(){
-        this( new TestBillingSystem(),new TestCustomerDatabase());
+        this( new MockBillingSystem(),new MainCustomerDatabase());
     }
     public TravelTracker(BillingSystem system){
-        this(system,new TestCustomerDatabase() );
+        this(system,new MainCustomerDatabase() );
     }
     public TravelTracker(BillingSystem system,EntityDatabase database){
         this(system,database,new Clock(){
@@ -51,6 +51,13 @@ public class TravelTracker implements ScanListener {
         this.eventLog.addAll(eventLog);
         this.cache = cache ;
     }
+    protected boolean isTraveling(UUID id){
+        if (currentlyTravelling.contains(id)) {
+         return  true;
+        } else {
+            return false;
+        }
+    }
 
     public void chargeAccounts() {
 //        CustomerDatabase customerDatabase = CustomerDatabase.getInstance();
@@ -65,7 +72,7 @@ public class TravelTracker implements ScanListener {
 
         boolean isOneJourneyPeak = false;
         System.out.println(customer.cardId()) ;
-        List<JourneyEvent> customerJourneyEvents = cache.get_Journeys_By_Customer( customer.cardId() ) ;
+        List<JourneyEvent> customerJourneyEvents = eventLog ;
         System.out.println( customerJourneyEvents.size() ) ;
         List<Journey> journeys = new ArrayList<Journey>();
         JourneyEvent start = null;

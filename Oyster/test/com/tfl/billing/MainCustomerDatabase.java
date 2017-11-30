@@ -6,7 +6,7 @@ import com.tfl.external.CustomerDatabase;
 import java.util.List;
 import java.util.UUID;
 
-public class TestCustomerDatabase implements EntityDatabase {
+public class MainCustomerDatabase implements EntityDatabase {
 
 
 

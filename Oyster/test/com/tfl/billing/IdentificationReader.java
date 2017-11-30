@@ -1,5 +1,6 @@
 package com.tfl.billing;
 
+import com.oyster.OysterCard;
 import com.oyster.ScanListener;
 
 import java.util.UUID;
@@ -10,5 +11,5 @@ public interface IdentificationReader {
 
     UUID id();
 
-    void touch(Identification card);
+    void touch(OysterCard card);
 }

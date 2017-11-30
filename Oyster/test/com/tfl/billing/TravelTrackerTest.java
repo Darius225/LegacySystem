@@ -1,12 +1,15 @@
 package com.tfl.billing;
 
 
+import com.oyster.OysterCard;
+import com.oyster.OysterCardReader;
 import com.tfl.external.Customer;
+import com.tfl.underground.OysterReaderLocator;
 import com.tfl.underground.Station;
-import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -21,31 +24,56 @@ import static org.junit.Assert.assertThat;
 public class TravelTrackerTest 
 {
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
 
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
     @Test
     public void connect() throws Exception 
     {
-        TravelTracker tracker = new TravelTracker();
-        IdentificationReader reader = context.mock(IdentificationReader.class,"reader1");
-        IdentificationReader reader2 = context.mock(IdentificationReader.class,"reader2");
-        context.checking(new Expectations() {{
-            exactly(1).of(reader).register(tracker);
-            exactly(1).of(reader2).register(tracker);
-        }});
+        TravelTracker tracker = Mockito.spy(new TravelTracker());
+        OysterCardReader reader = Mockito.spy(OysterReaderLocator.atStation(Station.PADDINGTON));
         tracker.connect(reader,reader2);
+        Mockito.verify(reader).register(tracker);
     }
     @Test
-    public void cardScanned() throws Exception 
+    public void cardScannedOnce() throws Exception
     {
         TravelTracker tracker = Mockito.spy(new TravelTracker());
-        Identification myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        OysterCard myCard = new OysterCard("38400000-8cf0-11bd-b23e-10b96e4ef00d");
         IdentificationReader reader = new OysterCardIDReader(Station.VICTORIA_STATION);
         tracker.connect(reader);
         reader.touch(myCard);
         Mockito.verify(tracker).cardScanned(myCard.id(),reader.id());
+        assertThat(tracker.isTraveling(myCard.id()),is(true));
     }
+    @Test
+    public void cardScannedTwice() throws Exception
+    {
+        TravelTracker tracker = Mockito.spy(new TravelTracker());
+        OysterCard myCard = new OysterCard("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        IdentificationReader reader = new OysterCardIDReader(Station.VICTORIA_STATION);
+        tracker.connect(reader);
+        reader.touch(myCard);
+        reader.touch(myCard);
+        Mockito.verify(tracker,Mockito.times(2)).cardScanned(myCard.id(),reader.id());
+        assertThat(tracker.isTraveling(myCard.id()),is(false));
+    }
+    @Test
+    public void unknownCardScanned() throws Exception
+    {
+        TravelTracker tracker = Mockito.spy(new TravelTracker());
+        OysterCard myCard = new OysterCard("38400332-8cf0-11bd-b23e-10b96e4ef00d");
+        IdentificationReader reader = new OysterCardIDReader(Station.VICTORIA_STATION);
+        tracker.connect(reader);
+
+        exception.expect(UnknownOysterCardException.class);
+
+        reader.touch(myCard);
+
+    }
+
     @Test
     public void chargeNothingIfNoJourneysMade() throws Exception
     {
@@ -112,15 +140,15 @@ public class TravelTrackerTest
     public void charge_Sequence_Of_Events ( int no_events , int hour [ ] , int minute [ ] , double expected_Total )
     {
         ControllableCustomerDatabase database = new ControllableCustomerDatabase();
-        OysterCardID myCard = new OysterCardID("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        database.add(new Customer("John Smith",myCard.getCard()));
+        OysterCard myCard = new OysterCard("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        database.add(new Customer("John Smith",myCard));
 
         OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
         OysterCardIDReader barbicanReader = new OysterCardIDReader("38402800-8cf0-11bd-b23e-10b96e4ef00d");
-        TestBillingSystem system = new TestBillingSystem();
+        MockBillingSystem system = new MockBillingSystem();
         ControllableClock clock = new ControllableClock();
         Cache c = new Cache () ;
-        JourneyBuilder builder = new JourneyBuilder(clock,database,c);
+        JourneyBuilder builder = new JourneyBuilder(clock,database);
         ArrayList <OysterCardIDReader > readers = new ArrayList< >();
         readers.add ( paddingtonReader ) ;
         readers.add ( barbicanReader ) ;

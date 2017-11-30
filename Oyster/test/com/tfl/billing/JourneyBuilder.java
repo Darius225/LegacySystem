@@ -1,5 +1,7 @@
 package com.tfl.billing;
 
+import com.oyster.OysterCard;
+
 import java.util.*;
 
 public class JourneyBuilder {
@@ -18,7 +20,7 @@ public class JourneyBuilder {
         return eventLog;
     }
 
-    public void addEvent(Identification cardId, IdentificationReader readerId) {
+    public void addEvent(OysterCard cardId, IdentificationReader readerId) {
         if (currentlyTravelling.contains(cardId.id())) {
             eventLog.add(new JourneyEnd(cardId.id(), readerId.id(),clock));
             currentlyTravelling.remove(cardId.id());

@@ -33,9 +33,8 @@ public class OysterCardIDReader implements IdentificationReader{
 
 
     @Override
-    public void touch(Identification card) {
-        OysterCard oCard = new OysterCard(card.id().toString());
-        reader.touch(oCard);
+    public void touch(OysterCard card) {
+        reader.touch(card);
     }
 
 }
