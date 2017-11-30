@@ -27,14 +27,13 @@ public class TravelTrackerTest
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
     @Test
     public void connect() throws Exception 
     {
         TravelTracker tracker = Mockito.spy(new TravelTracker());
         OysterCardReader reader = Mockito.spy(OysterReaderLocator.atStation(Station.PADDINGTON));
-        tracker.connect(reader,reader2);
+        tracker.connect(reader);
         Mockito.verify(reader).register(tracker);
     }
     @Test
@@ -148,7 +147,7 @@ public class TravelTrackerTest
         MockBillingSystem system = new MockBillingSystem();
         ControllableClock clock = new ControllableClock();
         Cache c = new Cache () ;
-        JourneyBuilder builder = new JourneyBuilder(clock,database);
+        JourneyBuilder builder = new JourneyBuilder(clock,database,c );
         ArrayList <OysterCardIDReader > readers = new ArrayList< >();
         readers.add ( paddingtonReader ) ;
         readers.add ( barbicanReader ) ;
