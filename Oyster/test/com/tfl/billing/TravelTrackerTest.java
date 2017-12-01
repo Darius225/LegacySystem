@@ -27,7 +27,7 @@ public class TravelTrackerTest
     @Rule
     public final ExpectedException exception = ExpectedException.none();
     private final OysterCard myCard = new OysterCard("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-    private final TravelTracker mockTracker = Mockito.spy(new TravelTracker());
+    private TravelTracker mockTracker = Mockito.spy(new TravelTracker());
     private final IdentificationReader victoriaReader = new OysterCardIDReader(Station.VICTORIA_STATION);
     private boolean[] travelling = new boolean [ 2 ] ;
     private final OysterCardIDReader paddingtonReader = new OysterCardIDReader("38400000-8cf0-11bd-b23e-10b96e4ef10d");
@@ -141,9 +141,9 @@ public class TravelTrackerTest
             clock.setTIme ( hour [ i ] , minute  [ i ] ) ;
             builder.addEvent ( myCard , readers.get ( i % 2 ) ) ;
         }
-        TravelTracker tracker = new TravelTracker(system,database,builder.getEventLog(),c);
+        ProxyTracker fakeTracker = new ProxyTracker(system,database,c);
 
-        tracker.chargeAccounts();
+        fakeTracker.chargeAccounts();
         assertThat(system.getTotalBill(),is(new BigDecimal(expectedTotal).setScale(2, BigDecimal.ROUND_HALF_UP)));
     }
     private void cardScannedSomeNumberOfTimes ( int noTimes ) throws Exception

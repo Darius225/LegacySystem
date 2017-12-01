@@ -6,27 +6,22 @@ import java.util.*;
 
 public class JourneyBuilder {
 
-    private final List<JourneyEvent> eventLog = new ArrayList<>();
     private final Set<UUID> currentlyTravelling = new HashSet<UUID>();
 
     EntityDatabase database;
     Clock clock ;
     Cache cache ;
 
-    public JourneyBuilder(Clock clock, EntityDatabase entityDatabase, Cache cache1){
+    public JourneyBuilder(Clock clock, EntityDatabase entityDatabase, Cache cache){
         this.database = entityDatabase;
         this.clock = clock;
-        this.cache = cache1 ;
+        this.cache = cache ;
     }
 
-    public List<JourneyEvent> getEventLog(){
-        return eventLog;
-    }
 
     public void addEvent(OysterCard cardId, IdentificationReader readerId) {
         if (currentlyTravelling.contains(cardId.id())) {
             JourneyEvent event = new JourneyEnd(cardId.id(), readerId.id(),clock) ;
-            eventLog.add( event );
             cache.add_Journey( event );
             currentlyTravelling.remove(cardId.id());
         } else {
@@ -34,7 +29,6 @@ public class JourneyBuilder {
                 JourneyEvent event = new JourneyStart(cardId.id(), readerId.id(),clock) ;
                 currentlyTravelling.add(cardId.id());
                 cache.add_Journey( event );
-                eventLog.add(new JourneyStart(cardId.id(), readerId.id(),clock));
             } else {
                 throw new UnknownOysterCardException(cardId.id());
             }
