@@ -12,51 +12,35 @@ import java.util.UUID;
 public class TravelTracker extends Tracker
 {
 
-    static final BigDecimal OFF_PEAK_JOURNEY_PRICE = new BigDecimal(2.40);
-    static final BigDecimal PEAK_JOURNEY_PRICE = new BigDecimal(3.20);
-
-    static final BigDecimal OFF_PEAK_LONG_JOURNEY_PRICE = new BigDecimal(2.70);
-    static final BigDecimal PEAK_LONG_JOURNEY_PRICE = new BigDecimal(3.80);
-
 
     private final Set<UUID> currentlyTravelling = new HashSet<UUID>();
 
-
-    protected BillingSystem billingSystem;
-    protected EntityDatabase entityDatabase;
-
-    private Clock clock;
-    private Cache cache = new Cache();
-
+     protected boolean isTraveling(UUID id){
+        if (currentlyTravelling.contains(id)) {
+            return  true;
+        } else {
+            return false;
+        }
+    }
 
     public TravelTracker(){
+
         this(new BillingSystem() {
             @Override
             public void charge(Customer customer, List<Journey> journeys, BigDecimal totalBill) {
                 PaymentsSystem.getInstance().charge(customer, journeys, totalBill);
             }
-        }, new MainCustomerDatabase());
+        }, new MainCustomerDatabase(),new Cache());
+        calculator = new StandardCostCalculator();
     }
-    public TravelTracker(BillingSystem system){
-        this(system,new MainCustomerDatabase() );
-    }
-    public TravelTracker(BillingSystem system,EntityDatabase database){
-        this(system,database,new Clock(){
-            public long getNow(){
-                return System.currentTimeMillis();
-            }
-        });
-    }
-    public TravelTracker(BillingSystem system,EntityDatabase database,Clock clock){
-        this.billingSystem = system;
-        this.entityDatabase = database;
-        this.clock = clock;
-    }
+
     public TravelTracker(BillingSystem system,EntityDatabase database , Cache cache){
         this.billingSystem = system;
         this.entityDatabase = database;
         this.cache = cache ;
+        calculator = new StandardCostCalculator();
     }
+
 
 
     @Override

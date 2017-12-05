@@ -13,8 +13,8 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -105,17 +105,19 @@ public class TravelTrackerTest
     private class ControllableClock implements Clock
     {
 
-        LocalTime time = LocalTime.now();
+        Calendar c = Calendar.getInstance();
+
 
         @Override
         public long getNow()
         {
-            return (long)(time.toNanoOfDay()/1e6);
+            return (c.getTime().getTime());
         }
 
         public void setTIme(int hour,int minute)
         {
-            time = LocalTime.of(hour-1,minute,0,0);
+            c.set(Calendar.HOUR_OF_DAY, hour);
+            c.set(Calendar.MINUTE, minute);
         }
     }
     public void noJourney( ) // If no journey is made,then there are 0 events .
