@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<InfoWarnings>
+  <Info>Begin full analysis with JArchitect v2017.1.4</Info>
+  <Info>Bytecode parsing</Info>
+  <Info>Third Party parsing</Info>
+  <Info>Parsing Source Files</Info>
+  <Info>PMD is disabled.You can enable it from 'Project Properties=&gt;Plugins Tab' to have more checks</Info>
+  <Info>CheckStyle is disabled.You can enable it from 'Project Properties=&gt;Plugins Tab' to have more checks</Info>
+  <Info>FindBugs is disabled.You can enable it from 'Project Properties=&gt;Plugins Tab' to have more checks</Info>
+  <Info>No dependency cycle detected in assemblies referencement graph.</Info>
+  <Info>Log trend metrics values.</Info>
+  <Info>JArchitect analysis done. Duration: 00:07</Info>
+</InfoWarnings>

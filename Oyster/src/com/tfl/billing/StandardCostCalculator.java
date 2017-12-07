@@ -36,6 +36,7 @@ public class StandardCostCalculator implements CostCalculator {
                 }
             }
         }
+
         return customerTotal;
     }
 

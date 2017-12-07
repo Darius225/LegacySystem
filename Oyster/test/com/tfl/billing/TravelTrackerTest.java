@@ -74,12 +74,12 @@ public class TravelTrackerTest
     @Test
     public void chargeIfJourneyIsMade() throws Exception
     {
-        singleJourney ( 10 , 0 , 15 , 2.40 ) ;
+        singleJourney ( 10 , 0 , 15 , 1.90 ) ;
     }
     @Test
     public void chargePeakIfPeakJourneyIsMade() throws Exception
     {
-        singleJourney ( 9 ,  0 , 15 , 3.20 ) ;
+        singleJourney ( 9 ,  0 , 15 , 2.90 ) ;
     }
     @Test
     public void chargeLongIfLongJourneyIsMade() throws Exception
@@ -94,12 +94,12 @@ public class TravelTrackerTest
     @Test
     public void capOffPeak()
     {
-        chargeSequenceOfEvents ( 6 , new int [ ] { 10 , 10 , 10 , 11 , 11 , 11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 7.00 );
+        chargeSequenceOfEvents ( 8 , new int [ ] { 10 , 10 , 10 , 11 , 11 , 11,12,12 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55,00,15 } , 7.00 );
     }
     @Test
     public void capPeak()
     {
-        chargeSequenceOfEvents ( 6 , new int [ ] {  9 ,  9 ,  9 , 10 , 10 , 10 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55 } , 9.00 );
+        chargeSequenceOfEvents ( 8 , new int [ ] {  9 ,  9 ,  9 , 10 , 10 , 10,11,11 } , new int [ ] { 00 , 15 , 55 , 15 , 20 , 55,00,15 } , 9.00 );
     }
 
     private class ControllableClock implements Clock
