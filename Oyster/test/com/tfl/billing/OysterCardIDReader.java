@@ -3,15 +3,16 @@ package com.tfl.billing;
 import com.oyster.OysterCard;
 import com.oyster.OysterCardReader;
 import com.oyster.ScanListener;
+import com.tfl.identification.IdentificationReader;
 import com.tfl.underground.OysterReaderLocator;
 import com.tfl.underground.Station;
 
 import java.util.UUID;
 
-public class OysterCardIDReader implements IdentificationReader{
+public class OysterCardIDReader implements IdentificationReader {
 
-    OysterCardReader reader;
-    UUID uuid;
+    private OysterCardReader reader;
+    private UUID uuid;
 
     public OysterCardIDReader(Station station){
         this.reader = OysterReaderLocator.atStation(station);

@@ -17,9 +17,5 @@ public class ProxyTracker extends Tracker {
     {
 
     }
-    public void connect(IdentificationReader... cardReaders) {
-        for (IdentificationReader cardReader : cardReaders) {
-            cardReader.register(this);
-        }
-    }
+
 }

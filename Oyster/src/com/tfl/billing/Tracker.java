@@ -3,6 +3,7 @@ package com.tfl.billing;
 import com.oyster.OysterCardReader;
 import com.oyster.ScanListener;
 import com.tfl.external.Customer;
+import com.tfl.identification.IdentificationReader;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -20,7 +21,6 @@ public abstract class Tracker implements ScanListener{
 
 
 
-
     public void chargeAccounts() {
         List<Customer> customers = entityDatabase.getCustomers();
         for (Customer customer : customers) {
@@ -34,7 +34,6 @@ public abstract class Tracker implements ScanListener{
 
         List<JourneyEvent> customerJourneyEvents;
         customerJourneyEvents = cache.get_Journeys_By_Customer( customer.cardId() ) ;
-        System.out.println(customerJourneyEvents.size());
         List<Journey> journeys = convertJourneyEvents(customerJourneyEvents);
         BigDecimal customerTotal = new BigDecimal(0);
         customerTotal = calculator.calculateJourneyCost(journeys, customerTotal);

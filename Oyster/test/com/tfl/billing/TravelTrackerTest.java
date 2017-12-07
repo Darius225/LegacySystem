@@ -4,6 +4,7 @@ package com.tfl.billing;
 import com.oyster.OysterCard;
 import com.oyster.OysterCardReader;
 import com.tfl.external.Customer;
+import com.tfl.identification.IdentificationReader;
 import com.tfl.underground.OysterReaderLocator;
 import com.tfl.underground.Station;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -18,7 +19,6 @@ import java.util.Calendar;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 
 
 public class TravelTrackerTest
@@ -106,8 +106,6 @@ public class TravelTrackerTest
     {
 
         Calendar c = Calendar.getInstance();
-
-
         @Override
         public long getNow()
         {
@@ -148,14 +146,14 @@ public class TravelTrackerTest
         fakeTracker.chargeAccounts();
         assertThat(system.getTotalBill(),is(new BigDecimal(expectedTotal).setScale(2, BigDecimal.ROUND_HALF_UP)));
     }
-    private void cardScannedSomeNumberOfTimes ( int noTimes ) throws Exception
+    private void cardScannedSomeNumberOfTimes ( int noTimes )
     {
+
         travelling [ 0 ] = false ;
         travelling [ 1 ] = true ;
-        mockTracker.connect ( victoriaReader );
         for ( int i = 1 ; i <= noTimes ; i ++ )
         {
-            victoriaReader.touch(myCard);
+            mockTracker.cardScanned(myCard.id(),victoriaReader.id());
         }
         Mockito.verify(mockTracker,Mockito.times(noTimes)).cardScanned(myCard.id(),victoriaReader.id());
         assertThat(mockTracker.isTraveling(myCard.id()),is( travelling [ noTimes % 2 ] ));
